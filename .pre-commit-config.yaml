@@ -1,0 +1,7 @@
+-   repo: git://github.com/pre-commit/pre-commit-hooks
+    sha: '775a7906cd6004bec2401a85ed16d5b3540d2f94'
+    hooks:
+    -   id: trailing-whitespace
+    -   id: flake8
+        language_version: python3
+    -   id: requirements-txt-fixer
