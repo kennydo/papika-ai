@@ -10,10 +10,6 @@ class TurnOffRoomLights(BaseActionHandler):
         log.info("Executing parameters: %s", parameters)
 
         room_entity_name = parameters['room']
-        if not room_entity_name:
-            # Default to turning off the lights in the living room
-            room_entity_name = 'living_room'
-
         room = self.bot.room_db.apiai_entity_name_to_room.get(room_entity_name)
 
         if not room:
