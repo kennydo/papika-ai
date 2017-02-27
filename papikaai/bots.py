@@ -66,14 +66,18 @@ class PapikaAIBot:
 
         log.info("Slack context %s command: %s", slack_context, command)
 
-        if slack_context.user != self.admin_user:
-            log.info("Ignoring unauthoriazed command")
-            return
-
         # TODO: handle acls, handle intent routing better
         response = self.api_ai_client.text_query(command)
 
         action = response['result']['action']
+
+        if slack_context.user != self.admin_user:
+            log.info("Ignoring unauthorized command (%s) from user %s: %s", action, slack_context.user, command)
+            self.papika_client.send_message(
+                slack_context.channel,
+                "User <@{0}> does not have permission to execute action `{1}` :smug_papika:".format(slack_context.user, action),
+            )
+            return
 
         log.info("Parsed command '%s' into action: %s", command, action)
 
