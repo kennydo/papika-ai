@@ -5,6 +5,9 @@ import phue
 
 log = logging.getLogger(__name__)
 
+#: Maximum hue light brightness
+MAX_BRIGHTNESS = 254
+
 
 class HueClient:
     def __init__(self, *, ip: str, username: str) -> None:
@@ -13,11 +16,18 @@ class HueClient:
             username=username,
         )
 
-    def turn_on_lights_in_group(self, group_id: int) -> None:
+    def turn_on_lights_in_group(self, group_id: int, set_brightness_percentage: Optional[int]=None) -> None:
         group = phue.Group(self._hue_bridge, group_id)
 
         log.info("Turning lights in group %s on", group_id)
+
+        # Make sure to turn the lighs on before changing the brightness for the brightness change to have effect
         group.on = True
+
+        if set_brightness_percentage is None:
+            group.brightness = MAX_BRIGHTNESS
+        elif set_brightness_percentage:
+            group.brightness = (set_brightness_percentage / 100) * MAX_BRIGHTNESS
 
     def turn_off_lights_in_group(self, group_id: int) -> None:
         group = phue.Group(self._hue_bridge, group_id)
@@ -31,9 +41,9 @@ class HueClient:
         on_state = True
 
         if brightness_percentage >= 100:
-            brightness = 254
+            brightness = MAX_BRIGHTNESS
         elif brightness_percentage > 0:
-            brightness = (brightness_percentage / 100) * 255
+            brightness = (brightness_percentage / 100) * MAX_BRIGHTNESS
         else:
             brightness = 0
             on_state = False
@@ -42,5 +52,5 @@ class HueClient:
 
         log.info("Setting lights in group %s to brightness %s", group_id, brightness)
 
-        group.brightness = brightness
         group.on = on_state
+        group.brightness = brightness
