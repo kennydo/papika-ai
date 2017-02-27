@@ -47,7 +47,10 @@ class PapikaClient:
             yield slack_event
 
     def send_message(self, channel: str, text: str) -> None:
-        value = json.dumps(value).encode()
+        value = json.dumps({
+            'channel': channel,
+            'text': text,
+        }).encode()
 
         self._kafka_producer.send(
             self._outbound_topic,

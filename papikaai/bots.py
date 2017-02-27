@@ -8,6 +8,7 @@ from papikaai.clients.hue import HueClient
 from papikaai.clients.papika import PapikaClient
 from papikaai.config import load_from_env_var_path
 from papikaai.contexts import SlackContext
+from papikaai.room_dbs import RoomDB
 
 log = logging.getLogger(__name__)
 
@@ -41,6 +42,9 @@ class PapikaAIBot:
             handler_class = entry_point.load()
             self.action_handlers[action] = handler_class
 
+        # Load rooms
+        self.room_db = RoomDB(self.config['rooms'])
+
     def extract_command_from_slack_message(self, text: str) -> Optional[str]:
         """Returns the command string if the text starts with the command prefix, else returns `None`."""
         if not text:
@@ -70,6 +74,8 @@ class PapikaAIBot:
         response = self.api_ai_client.text_query(command)
 
         action = response['result']['action']
+
+        log.info("Parsed command '%s' into action: %s", command, action)
 
         handler_class = self.action_handlers.get(action)
         if not handler_class:
