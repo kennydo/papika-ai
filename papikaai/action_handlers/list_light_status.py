@@ -19,7 +19,7 @@ class ListLightStatus(BaseActionHandler):
                 continue
 
             if status.is_on:
-                line = ":full_moon: {0}: {1}%".format(room.human_name, status.brightness_percentage)
+                line = ":full_moon: {0}: {1}%".format(room.human_name, round(status.brightness_percentage))
             else:
                 line = ":new_moon: {0}: off".format(room.human_name)
 
