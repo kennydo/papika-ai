@@ -26,6 +26,7 @@ setup(
         ],
         'papika_ai.action_handlers': [
             'input.unknown = papikaai.action_handlers.fallback:Fallback',
+            'lights.list_light_status = papikaai.action_handlers.list_light_status:ListLightStatus',
             'lights.set_room_brightness = papikaai.action_handlers.set_room_brightness:SetRoomBrightness',
             'lights.turn_off_room_lights = papikaai.action_handlers.turn_off_room_lights:TurnOffRoomLights',
             'lights.turn_on_room_lights = papikaai.action_handlers.turn_on_room_lights:TurnOnRoomLights',

@@ -15,14 +15,19 @@ log = logging.getLogger(__name__)
 
 class PapikaAIBot:
     def __init__(self) -> None:
+        log.info("Loading configuration")
         self.config = load_from_env_var_path()
-        log.info("Loaded configuration")
 
+        log.info("Creating Api.AI client")
         self.api_ai_client = ApiAIClient(self.config['apiai']['client_access_token'])
+
+        log.info("Creating Hue client")
         self.hue_client = HueClient(
             ip=self.config['hue']['bridge_ip'],
             username=self.config['hue']['bridge_username'],
         )
+
+        log.info("Creating Papika client")
         self.papika_client = PapikaClient(
             bootstrap_servers=self.config['kafka']['bootstrap_servers'],
             group_id=self.config['kafka']['inbound_group_id'],
@@ -33,6 +38,7 @@ class PapikaAIBot:
         self.command_prefix = self.config['papika_ai']['command_prefix']
         self.admin_user = self.config['papika_ai']['admin_user']
 
+        log.info("Loading action handlers")
         # Map Api.AI actions to classes to handle it
         self.action_handlers = {}
 
@@ -43,6 +49,7 @@ class PapikaAIBot:
             self.action_handlers[action] = handler_class
 
         # Load rooms
+        log.info("Loading room data")
         self.room_db = RoomDB(self.config['rooms'])
 
     def extract_command_from_slack_message(self, text: str) -> Optional[str]:
@@ -91,5 +98,6 @@ class PapikaAIBot:
         handler.execute(slack_context, parameters)
 
     def run(self) -> None:
+        log.info("Starting run loop")
         for event in self.papika_client.yield_slack_events():
             self.handle_slack_event(event)

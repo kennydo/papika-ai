@@ -19,6 +19,7 @@ class RoomDB:
 
         # Create the mappings we'll need later
         self.apiai_entity_name_to_room = {}
+        self.hue_group_id_to_room = {}
 
         log.info("Loading %s rooms", len(rooms))
 
@@ -35,5 +36,6 @@ class RoomDB:
 
             self._rooms.append(room_entry)
             self.apiai_entity_name_to_room[apiai_entity_name] = room_entry
+            self.hue_group_id_to_room[hue_group_id] = room_entry
 
         log.info("Finished loading rooms")

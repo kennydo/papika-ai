@@ -1,4 +1,6 @@
 import logging
+from typing import List
+from typing import NamedTuple
 from typing import Optional
 
 import phue
@@ -7,6 +9,14 @@ log = logging.getLogger(__name__)
 
 #: Maximum hue light brightness
 MAX_BRIGHTNESS = 254
+
+
+LightGroupStatus = NamedTuple('LightGroupStatus', [
+    ('group_id', int),
+    ('is_on', bool),
+    ('brightness', int),
+    ('brightness_percentage', float),
+])
 
 
 class HueClient:
@@ -54,3 +64,17 @@ class HueClient:
 
         group.on = on_state
         group.brightness = brightness
+
+    def list_light_status(self) -> List[LightGroupStatus]:
+        statuses = []
+
+        for group in self._hue_bridge.groups:
+            status = LightGroupStatus(
+                group_id=group.group_id,
+                is_on=group.on,
+                brightness=group.brightness,
+                brightness_percentage=float((group.brightness / MAX_BRIGHTNESS) * 100),
+            )
+            statuses.append(status)
+
+        return statuses
