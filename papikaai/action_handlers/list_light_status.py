@@ -7,8 +7,6 @@ log = logging.getLogger(__name__)
 
 class ListLightStatus(BaseActionHandler):
     def execute(self, slack_context, parameters):
-        log.info("Executing parameters: %s", parameters)
-
         statuses = self.bot.hue_client.list_light_status()
 
         lines = ["Room light statuses:"]

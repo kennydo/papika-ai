@@ -7,8 +7,6 @@ log = logging.getLogger(__name__)
 
 class TurnOnRoomLights(BaseActionHandler):
     def execute(self, slack_context, parameters):
-        log.info("Executing parameters: %s", parameters)
-
         room_entity_name = parameters['room']
         if not room_entity_name:
             # Default to turning on the lights in the living room

@@ -96,6 +96,8 @@ class PapikaAIBot:
 
         handler = handler_class(self)
         parameters = response['result']['parameters']
+
+        log.info("Executing action '%s' with parameters: %s", action, parameters)
         handler.execute(slack_context, parameters)
 
     def run(self) -> None:
