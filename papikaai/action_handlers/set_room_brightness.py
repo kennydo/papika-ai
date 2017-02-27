@@ -29,4 +29,3 @@ class SetRoomBrightness(BaseActionHandler):
             "Setting brightness of {0} to {1}%".format(room.human_name, brightness),
         )
         self.bot.hue_client.set_room_brightness(room.hue_group_id, brightness)
-

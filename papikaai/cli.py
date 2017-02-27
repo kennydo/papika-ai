@@ -8,5 +8,6 @@ def main():
     bot = PapikaAIBot()
     bot.run()
 
+
 if __name__ == "__main__":
     main()

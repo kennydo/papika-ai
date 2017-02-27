@@ -82,7 +82,8 @@ class PapikaAIBot:
             log.info("Ignoring unauthorized command (%s) from user %s: %s", action, slack_context.user, command)
             self.papika_client.send_message(
                 slack_context.channel,
-                "User <@{0}> does not have permission to execute action `{1}` :smug_papika:".format(slack_context.user, action),
+                "User <@{0}> does not have permission to execute action `{1}` :smug_papika:".format(
+                    slack_context.user, action),
             )
             return
 

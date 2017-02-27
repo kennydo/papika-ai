@@ -29,4 +29,3 @@ class ListLightStatus(BaseActionHandler):
             slack_context.channel,
             "\n".join(lines),
         )
-

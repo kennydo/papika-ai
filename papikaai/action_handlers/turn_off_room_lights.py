@@ -24,5 +24,3 @@ class TurnOffRoomLights(BaseActionHandler):
             "Turning off the lights in {0}".format(room.human_name),
         )
         self.bot.hue_client.turn_off_lights_in_group(room.hue_group_id)
-
-
