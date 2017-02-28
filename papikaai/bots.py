@@ -2,6 +2,7 @@ import logging
 import pkg_resources
 from typing import Optional
 
+from papikaai.acl_engines import ACLEngine
 from papikaai.action_handlers.fallback import Fallback
 from papikaai.clients.api_ai import ApiAIClient
 from papikaai.clients.hue import HueClient
@@ -52,6 +53,10 @@ class PapikaAIBot:
         log.info("Loading room data")
         self.room_db = RoomDB(self.config['rooms'])
 
+        # Load ACLs
+        log.info("Loading ACL data")
+        self.acl_engine = ACLEngine(self.config['acls'])
+
     def extract_command_from_slack_message(self, text: str) -> Optional[str]:
         """Returns the command string if the text starts with the command prefix, else returns `None`."""
         if not text:
@@ -73,12 +78,13 @@ class PapikaAIBot:
 
         log.info("Slack context %s command: %s", slack_context, command)
 
-        # TODO: handle acls, handle intent routing better
         response = self.api_ai_client.text_query(command)
 
         action = response['result']['action']
 
-        if slack_context.user != self.admin_user:
+        has_access_to_action = self.acl_engine.has_access_to_action(user_id=slack_context.user, action=action)
+
+        if not has_access_to_action:
             log.info("Ignoring unauthorized command (%s) from user %s: %s", action, slack_context.user, command)
             self.papika_client.send_message(
                 slack_context.channel,
