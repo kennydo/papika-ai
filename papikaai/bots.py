@@ -37,7 +37,6 @@ class PapikaAIBot:
         )
 
         self.command_prefix = self.config['papika_ai']['command_prefix']
-        self.admin_user = self.config['papika_ai']['admin_user']
 
         log.info("Loading action handlers")
         # Map Api.AI actions to classes to handle it
