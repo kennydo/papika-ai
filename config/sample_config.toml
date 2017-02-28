@@ -1,0 +1,97 @@
+[papika_ai]
+command_prefix = '<@U2VEKS57B>'
+
+[kafka]
+bootstrap_servers = [
+    "192.168.1.10:9092",
+    "192.168.1.11:9092",
+]
+
+inbound_topic = 'papika_from_slack'
+inbound_group_id = 'papika-ai'
+
+outbound_topic = 'papika_to_slack'
+
+[apiai]
+client_access_token = 'YOURTOKENHERE'
+
+[hue]
+bridge_ip = '192.168.1.12'
+bridge_username = 'YOURUSERNAMEHERE'
+
+[[rooms]]
+human_name = 'all'
+hue_group_id = 0
+apiai_entity_name = 'all_rooms'
+
+[[rooms]]
+human_name = 'living room'
+hue_group_id = 2
+apiai_entity_name = 'living_room'
+
+[[rooms]]
+human_name = 'bedroom'
+hue_group_id = 1
+apiai_entity_name = 'bedroom'
+
+[[acls.groups]]
+name = "admin"
+members = [
+    "U267NCD1U",
+]
+
+[[acls.groups]]
+name = "apartment"
+members = [
+    "U268EV1F1",
+]
+
+[[acls.groups]]
+name = "visitors"
+members = [
+    "U267RLN12",
+]
+
+[acls]
+public_action_patterns = [
+    "^lights.list_light_status$",
+    "^input.unknown$",
+    "^papikaai.list_actions$",
+]
+
+[[acls.rules]]
+group = "admin"
+action_patterns = [
+    ".*",
+]
+allow = true
+
+[[acls.rules]]
+group = "apartment"
+action_patterns = [
+    ".*",
+]
+allow = true
+
+[[acls.rules]]
+group = "visitors"
+action_patterns = [
+]
+allow = true
+
+[logging]
+version = 1
+disable_existing_loggers = false
+
+[logging.formatters.verbose]
+format = "%(levelname)s %(asctime)s %(module)s [%(process)d] %(message)s"
+
+[logging.handlers.console]
+level = "DEBUG"
+class = "logging.StreamHandler"
+formatter = "verbose"
+
+[logging.loggers."papikaai"]
+handlers = ["console"]
+level = "INFO"
+
