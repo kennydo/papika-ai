@@ -30,6 +30,7 @@ setup(
             'lights.set_room_brightness = papikaai.action_handlers.set_room_brightness:SetRoomBrightness',
             'lights.turn_off_room_lights = papikaai.action_handlers.turn_off_room_lights:TurnOffRoomLights',
             'lights.turn_on_room_lights = papikaai.action_handlers.turn_on_room_lights:TurnOnRoomLights',
+            'papikaai.list_actions = papikaai.action_handlers.list_actions:ListActions',
         ],
     },
 )
